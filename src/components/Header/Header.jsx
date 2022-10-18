@@ -5,9 +5,9 @@ import './Header.css';
 import Navigation from './Navigation/Navigation';
 import logo from '../../images/logo.svg';
 
-function Header({ themeLight, authorized, onClickBurger, isBurgerOpened }) {
+function Header({ authorized, onClickBurger, isBurgerOpened, themeBlack }) {
   return (
-    <header className={`header header_theme_${themeLight ? 'light' : 'bright'}`}>
+    <header className={`header header_theme_${themeBlack ? 'black' : 'bright'}`}>
       <div className="header__container">
         <Link to="/" className="header__link">
           <img src={logo} alt="Логотип" />
@@ -16,7 +16,7 @@ function Header({ themeLight, authorized, onClickBurger, isBurgerOpened }) {
           authorized={authorized}
           onClickBurger={onClickBurger}
           isBurgerOpened={isBurgerOpened}
-          themeLight={themeLight}
+          themeBlack={themeBlack}
         />
       </div>
     </header>

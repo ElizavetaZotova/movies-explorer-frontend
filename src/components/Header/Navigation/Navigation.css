@@ -30,8 +30,8 @@
   transition: all .3s ease;
 }
 
-.navigation_light .navigation__link {
-  color: #000;
+.navigation_black .navigation__link {
+  color: #fff;
 }
 
 .navigation__link:hover {
@@ -69,7 +69,7 @@
   padding-right: 20px;
   min-height: 30px;
   border-radius: 20px;
-  background-color: #F5F5F5;
+  background-color: #313131;
 }
 
 @media screen and (max-width: 800px) {
@@ -86,7 +86,7 @@
     flex-direction: column;
     height: 100vh;
     width: 67%;
-    background-color: #fff;
+    background-color: #202020;
   }
 
   .navigation__link_type_account {

@@ -21,7 +21,7 @@ const moviesData = [
   {
     _id: '1',
     poster: posterImage1,
-    title: '33 слова о дизайне-1',
+    title: 'В погоне за Бенкси-1',
     duration: getRandomDuration(),
     saved: true,
   },
@@ -29,14 +29,14 @@ const moviesData = [
   {
     _id: '2',
     poster: posterImage2,
-    title: '33 слова о дизайне-2',
+    title: 'В погоне за Бенкси-2',
     duration: getRandomDuration(),
   },
 
   {
     _id: '3',
     poster: posterImage3,
-    title: '33 слова о дизайне-3',
+    title: 'В погоне за Бенкси-3',
     duration: '1ч 42м',
     saved: true,
   },
@@ -44,7 +44,7 @@ const moviesData = [
   {
     _id: '4',
     poster: posterImage4,
-    title: '33 слова о дизайне-4',
+    title: 'В погоне за Бенкси-4',
     duration: '1ч 42м',
     saved: true,
   },
@@ -52,7 +52,7 @@ const moviesData = [
   {
     _id: '5',
     poster: posterImage3,
-    title: '33 слова о дизайне-5',
+    title: 'В погоне за Бенкси-5',
     duration: getRandomDuration(),
     saved: true,
   },
@@ -60,28 +60,28 @@ const moviesData = [
   {
     _id: '6',
     poster: posterImage2,
-    title: '33 слова о дизайне-6',
+    title: 'В погоне за Бенкси-6',
     duration: getRandomDuration(),
   },
 
   {
     _id: '7',
     poster: posterImage1,
-    title: '33 слова о дизайне-7',
+    title: 'В погоне за Бенкси-7',
     duration: getRandomDuration(),
   },
 
   {
     _id: '8',
     poster: posterImage4,
-    title: '33 слова о дизайне-8',
+    title: 'В погоне за Бенкси-8',
     duration: getRandomDuration(),
   },
 
   {
     _id: '9',
     poster: posterImage2,
-    title: '33 слова о дизайне-9',
+    title: 'В погоне за Бенкси-9',
     duration: getRandomDuration(),
     saved: true,
   },
@@ -89,28 +89,28 @@ const moviesData = [
   {
     _id: '10',
     poster: posterImage1,
-    title: '33 слова о дизайне-10',
+    title: 'В погоне за Бенкси-10',
     duration: getRandomDuration(),
   },
 
   {
     _id: '11',
     poster: posterImage2,
-    title: '33 слова о дизайне-11',
+    title: 'В погоне за Бенкси-11',
     duration: getRandomDuration(),
   },
 
   {
     _id: '12',
     poster: posterImage2,
-    title: '33 слова о дизайне-12',
+    title: 'В погоне за Бенкси-12',
     duration: getRandomDuration(),
   },
 
   {
     _id: '13',
     poster: posterImage4,
-    title: '33 слова о дизайне-13',
+    title: 'В погоне за Бенкси-13',
     duration: getRandomDuration(),
   }
 ];

@@ -15,30 +15,32 @@ export default function MoviesCard({ card }) {
   return (
     <li className="movies-card">
       <article className="movies-card__item">
+        <div className="movies-card__description">
+          <h2 className="movies-card__title">{card.title}</h2>
+          <span className="movies-card__duration">{card.duration}</span>
+        </div>
+
         <img
           src={card.poster}
           alt={card.title}
           className="movies-card__poster"
         />
-        <div className="movies-card__description">
-          <h2 className="movies-card__title">{card.title}</h2>
-          {location.pathname === '/movies' && (
-            <button
-              type="button"
-              className={`movies-card__button movies-card__button_type_${
-                !isCardSaved ? 'save' : 'saved'
-              }`}
-              onClick={handleOnClick}
-            ></button>
-          )}
-          {location.pathname === '/saved-movies' && (
-            <button
-              type="button"
-              className="movies-card__button movies-card__button_type_unsave"
-            ></button>
-          )}
-        </div>
-        <span className="movies-card__duration">{card.duration}</span>
+
+        {location.pathname === '/movies' && (
+          <button
+            type="button"
+            className={`movies-card__button movies-card__button_type_${
+              !isCardSaved ? 'save' : 'saved'
+            }`}
+            onClick={handleOnClick}
+          >{isCardSaved ? '' : 'Сохранить'}</button>
+        )}
+        {location.pathname === '/saved-movies' && (
+          <button
+            type="button"
+            className="movies-card__button movies-card__button_type_unsave"
+          ></button>
+        )}
       </article>
     </li>
   );

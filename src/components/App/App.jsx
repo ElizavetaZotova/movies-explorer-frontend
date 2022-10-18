@@ -41,17 +41,17 @@ export default function App() {
     <div className="app">
       <Switch>
         <Route path="/" exact>
-          <Header themeLight={false} authorized={false} onClickBurger={onClickBurger} isBurgerOpened={isBurgerOpened} />
+          <Header themeBlack={false} authorized={false} onClickBurger={onClickBurger} isBurgerOpened={isBurgerOpened} />
           <Main />
           <Footer />
         </Route>
         <Route path="/movies">
-          <Header themeLight={true} authorized={true} onClickBurger={onClickBurger} isBurgerOpened={isBurgerOpened} />
+          <Header themeBlack={true} authorized={true} onClickBurger={onClickBurger} isBurgerOpened={isBurgerOpened} />
           <Movies movies={movies} />
           <Footer />
         </Route>
         <Route exact path="/saved-movies">
-          <Header themeLight={true} authorized={true} onClickBurger={onClickBurger} isBurgerOpened={isBurgerOpened} />
+          <Header themeBlack={true} authorized={true} onClickBurger={onClickBurger} isBurgerOpened={isBurgerOpened} />
           <SavedMovies movies={savedMovies}/>
           <Footer />
         </Route>
@@ -62,7 +62,7 @@ export default function App() {
           <Login />
         </Route>
         <Route exact path="/profile">
-          <Header themeLight={true} authorized={true} onClickBurger={onClickBurger} isBurgerOpened={isBurgerOpened} />
+          <Header themeBlack={true} authorized={true} onClickBurger={onClickBurger} isBurgerOpened={isBurgerOpened} />
           <Profile />
         </Route>
         <Route path="*">

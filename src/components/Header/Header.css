@@ -4,10 +4,6 @@
   justify-content: space-around;
 }
 
-.header_theme_light {
-  background-color: #fff;
-}
-
 .header_theme_bright {
   background-color: #073042;
 }
@@ -28,7 +24,6 @@
 }
 
 .header__link:hover {
-  transform: rotate(45deg);
   opacity: .7;
 }
 

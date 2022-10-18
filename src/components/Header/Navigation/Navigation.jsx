@@ -7,7 +7,7 @@ export default function Navigation({
   authorized,
   isBurgerOpened,
   onClickBurger,
-  themeLight,
+  themeBlack,
 }) {
   const activeLink = `navigation__link_active_${
     isBurgerOpened ? 'mobile' : 'desktop'
@@ -16,7 +16,7 @@ export default function Navigation({
   return (
     <>
       {!authorized ? (
-        <nav className={`navigation ${themeLight ? 'navigation_light' : ''}`}>
+        <nav className={`navigation ${themeBlack ? 'navigation_black' : ''}`}>
           <ul className="navigation__list">
             <li>
               <Link
@@ -40,7 +40,7 @@ export default function Navigation({
         <nav
           className={`navigation navigation_state_${
             isBurgerOpened ? 'opened' : 'closed'
-          } ${themeLight ? 'navigation_light' : ''}`}
+          } ${themeBlack ? 'navigation_black' : ''}`}
         >
           <Hamburger
             isBurgerOpened={isBurgerOpened}

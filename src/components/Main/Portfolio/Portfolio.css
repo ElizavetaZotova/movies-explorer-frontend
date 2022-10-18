@@ -1,5 +1,5 @@
 .portfolio {
-  background-color: #fff;
+  background-color: #202020;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,7 +37,7 @@
 .portfolio__projects-item {
   display: flex;
   padding-bottom: 19px;
-  border-bottom: 1px solid #E6E6E6;
+  border-bottom: 1px solid #424242;
   box-sizing: border-box;
   transition: all 0.3s ease;
 }
@@ -57,7 +57,7 @@
   font-size: 30px;
   line-height: 1.67;
   letter-spacing: -0.04em;
-  color: #000;
+  color: #fff;
   width: 100%;
   position: relative;
   transition: all 0.3s ease;
