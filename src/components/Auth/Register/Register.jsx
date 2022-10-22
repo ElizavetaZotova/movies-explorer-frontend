@@ -5,11 +5,12 @@ import './Register.css';
 import logo from '../../../images/logo.svg';
 import useFormWithValidation from '../../../hooks/useFormWithValidation';
 
-export default function Register() {
+export default function Register({ handleRegister }) {
   const { values, handleChange, resetForm, errors, isValid } = useFormWithValidation();
 
   function handleSubmit(e) {
     e.preventDefault();
+    handleRegister(values);
   }
 
   useEffect(() => {

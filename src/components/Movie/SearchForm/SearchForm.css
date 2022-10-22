@@ -15,7 +15,7 @@
 .search__input {
   width: 100%;
   background-color: transparent;
-  color: #000;
+  color: #fff;
   font-weight: 400;
   font-size: 14px;
   line-height: 18px;
@@ -46,6 +46,16 @@
   border-radius: 48px;
   transform: translateY(50%);
   transition: all 0.3s ease;
+}
+
+.search__error {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 1.2;
+  color: #ee3465;
+  position: absolute;
+  top: 70px;
+  left: 0;
 }
 
 .search__button:hover {

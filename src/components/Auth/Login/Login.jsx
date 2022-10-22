@@ -6,11 +6,12 @@ import './Login.css';
 import logo from '../../../images/logo.svg';
 import useFormWithValidation from '../../../hooks/useFormWithValidation';
 
-export default function Login() {
+export default function Login({ handleLogin }) {
   const { values, handleChange, resetForm, errors, isValid } = useFormWithValidation();
 
   function handleSubmit(e) {
     e.preventDefault();
+    handleLogin(values);
   }
 
   useEffect(() => {

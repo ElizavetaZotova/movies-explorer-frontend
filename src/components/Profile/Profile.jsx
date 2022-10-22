@@ -1,19 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 
-import './Profile.css';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import useFormWithValidation from '../../hooks/useFormWithValidation';
 
-export default function Profile() {
-  const { values, handleChange, resetForm, errors, isValid } =
-    useFormWithValidation();
+import './Profile.css';
+
+export default function Profile({ handleSignOut, handleProfile }) {
+  const { values, handleChange, resetForm, errors, isValid } = useFormWithValidation();
+  const currentUser = useContext(CurrentUserContext);
 
   function handleSubmit(e) {
     e.preventDefault();
+    handleProfile(values);
   }
 
   useEffect(() => {
-    resetForm();
-  }, [resetForm]);
+    if (currentUser) {
+      resetForm(currentUser, {}, true);
+    }
+  }, [currentUser, resetForm]);
+
+  const requirementValidity = (!isValid || (currentUser.name === values.name && currentUser.email === values.email));
+
 
   return (
     <main className="profile">
@@ -60,13 +68,13 @@ export default function Profile() {
           <button
             type="submit"
             className={`profile__button-edit ${
-              !isValid && 'profile__button-edit_disabled'
+              !requirementValidity && 'profile__button-edit_disabled'
             }`}
-            disabled={!isValid}
+            disabled={requirementValidity ? true : false}
           >
             Редактировать
           </button>
-          <button type="submit" className="profile__button-exit">
+          <button type="button" className="profile__button-exit" onClick={handleSignOut}>
             Выйти из аккаунта
           </button>
         </div>
