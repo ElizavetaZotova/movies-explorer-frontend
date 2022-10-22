@@ -1,0 +1,30 @@
+import { useMediaQuery } from 'react-responsive';
+import { useEffect } from 'react';
+
+import './Hamburger.css';
+
+export default function Hamburger({ isBurgerOpened, onClickBurger }) {
+  const isMobile = useMediaQuery({ query: `(max-width: 800px)` });
+
+  const handleOnClickBurger = () => {
+    onClickBurger(isBurgerOpened);
+  };
+
+  useEffect(() => {
+    if (!isMobile) {
+      onClickBurger(true);
+    }
+  }, [isMobile, onClickBurger]);
+
+  return (
+    <button
+      type="button"
+      className={`hamburger-button hamburger-button_${
+        isBurgerOpened ? 'on' : 'off'
+      }`}
+      onClick={handleOnClickBurger}
+    >
+      <span></span>
+    </button>
+  );
+}

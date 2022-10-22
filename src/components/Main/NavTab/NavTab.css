@@ -1,0 +1,35 @@
+.nav-tab {
+  height: 66px;
+  width: 100%;
+  background-color: #272727;
+}
+
+.nav-tab__links-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.nav-tab__link {
+  color: #fff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.nav-tab__link:nth-child(even) {
+  margin-right: 40px;
+  margin-left: 40px;
+}
+
+@media screen and (max-width: 400px) {
+  .nav-tab__link {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .nav-tab__link:nth-child(even) {
+    margin-right: 24px;
+    margin-left: 24px;
+  }
+}
