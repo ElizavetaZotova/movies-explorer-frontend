@@ -26,7 +26,6 @@ export default function MoviesCardList({
 
   const location = useLocation();
 
-  // количество отображаемых карточек при разной ширине экрана
   useEffect(() => {
     if (location.pathname === '/movies') {
       if (screenWidth > desktop.width) {
@@ -40,7 +39,7 @@ export default function MoviesCardList({
     }
   }, [screenWidth, isMount, desktop, tablet, mobile, location.pathname]);
 
-  // изменяем отображаемый массив фильмов в зависимости от ширины экрана
+
   useEffect(() => {
     if (moviesList.length) {
       const res = moviesList.filter((item, i) => i < cardsShowDetails.total);
@@ -48,7 +47,6 @@ export default function MoviesCardList({
     }
   }, [moviesList, cardsShowDetails.total]);
 
-  // добавление карточек при клике по кнопке "Еще"
   function handleClickMoreMovies() {
     const start = showMovieList.length;
     const end = start + cardsShowDetails.more;

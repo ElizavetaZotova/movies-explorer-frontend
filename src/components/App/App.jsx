@@ -4,6 +4,7 @@ import {
   Switch,
   Redirect,
   useHistory,
+  useLocation,
 } from 'react-router-dom';
 
 import './App.css';
@@ -15,7 +16,7 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import Movies from '../Movie/Movies/Movies';
-import SavedMovies from '../Movie/Movies/Movies';
+import SavedMovies from '../Movie/SavedMovies/SavedMovies';
 import Register from '../Auth/Register/Register';
 import Login from '../Auth/Login/Login';
 import Profile from '../Profile/Profile';
@@ -25,6 +26,7 @@ import InfoTooltip from '../InfoTooltip/InfoTooltip';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 export default function App() {
+  const location = useLocation();
   const history = useHistory();
   const [load, setLoad] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
@@ -37,6 +39,8 @@ export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [savedMoviesList, setSavedMoviesList] = useState([]);
+  const [loginError, setLoginError] = useState(null);
+  const [registerError, setRegisterError] = useState(null);
 
   const headerEndpoints = ['/movies', '/saved-movies', '/profile', '/'];
   const footerEndpoints = ['/movies', '/saved-movies', '/'];
@@ -57,6 +61,8 @@ export default function App() {
 
   function handleRegister({ name, email, password }) {
     setIsLoader(true);
+    setRegisterError(null);
+
     mainApi
       .createUser(name, email, password)
       .then((data) => {
@@ -65,46 +71,43 @@ export default function App() {
         }
       })
       .catch((err) =>
-        setIsInfoTooltip({
-          isOpen: true,
-          successful: false,
-          text: err,
-        })
+        setRegisterError(err)
       )
       .finally(() => setIsLoader(false));
   }
 
   function handleLogin({ email, password }) {
     setIsLoader(true);
+    setLoginError(null);
+
     mainApi
       .login(email, password)
-      .then((jwt) => {
-        if (jwt.token) {
-          localStorage.setItem('jwt', jwt.token);
-          setLoggedIn(true);
-          history.push('/movies');
-          setIsInfoTooltip({
-            isOpen: true,
-            successful: true,
-            text: 'Добро пожаловать!',
-          });
-        }
+      .then(() => {
+        setLoggedIn(true);
+        history.push('/movies');
       })
       .catch((err) =>
-        setIsInfoTooltip({
-          isOpen: true,
-          successful: false,
-          text: err,
-        })
+        setLoginError(err)
       )
       .finally(() => setIsLoader(false));
   }
 
   function handleSignOut() {
-    setCurrentUser({});
-    setLoggedIn(false);
-    localStorage.clear();
-    history.push('/');
+    mainApi
+    .logout()
+    .then(() => {
+      setCurrentUser({});
+      setLoggedIn(false);
+      history.push('/');
+    })
+    .catch((err) =>
+      setIsInfoTooltip({
+        isOpen: true,
+        successful: false,
+        text: err,
+      })
+    )
+    .finally(() => setIsLoader(false));
   }
 
   function handleProfile({ name, email }) {
@@ -176,16 +179,10 @@ export default function App() {
         if (data) {
           setLoggedIn(true);
           setCurrentUser(data);
-          // history.push(path);
+          history.push(location.pathname);
         }
       })
-      .catch((err) =>
-        setIsInfoTooltip({
-          isOpen: true,
-          successful: false,
-          text: err,
-        })
-      )
+      .catch(() => {})
       .finally(() => {
         setIsLoader(false);
         setLoad(true);
@@ -196,45 +193,15 @@ export default function App() {
     checkAuth();
   }, []);
 
-  // useEffect(() => {
-  //   const path = location.pathname;
-  //   const jwt = localStorage.getItem('jwt');
-
-  //   if (jwt) {
-
-  //   } else {
-  //     setLoad(true);
-  //   }
-  // }, []);
-
   useEffect(() => {
-    if (loggedIn) {
-      setIsLoader(true);
-      mainApi
-        .getUserInfo()
-        .then((res) => setCurrentUser(res))
-        .catch((err) =>
-          setIsInfoTooltip({
-            isOpen: true,
-            successful: false,
-            text: err,
-          })
-        )
-        .finally(() => setIsLoader(false));
-    }
-  }, [loggedIn]);
-
-  useEffect(() => {
-    console.log(loggedIn, currentUser);
     if (loggedIn && currentUser) {
       mainApi
         .getSavedMovies()
         .then((data) => {
-          console.log('data', data);
-          const UserMoviesList = data.filter(
+          const userSavedMoviesList = data.filter(
             (m) => m.owner === currentUser._id
           );
-          setSavedMoviesList(UserMoviesList);
+          setSavedMoviesList(userSavedMoviesList);
         })
         .catch((err) =>
           setIsInfoTooltip({
@@ -265,14 +232,14 @@ export default function App() {
             </Route>
             <Route exact path="/signup">
               {!loggedIn ? (
-                <Register handleRegister={handleRegister} />
+                <Register handleRegister={handleRegister} registerError={registerError}/>
               ) : (
                 <Redirect to="/" />
               )}
             </Route>
             <Route exact path="/signin">
               {!loggedIn ? (
-                <Login handleLogin={handleLogin} />
+                <Login handleLogin={handleLogin} loginError={loginError}/>
               ) : (
                 <Redirect to="/" />
               )}
@@ -306,10 +273,10 @@ export default function App() {
               <NotFound goBack={goBack} />
             </Route>
           </Switch>
+          <Preloader isOpen={isLoader} />
           <Route exact path={footerEndpoints}>
             <Footer />
           </Route>
-          <Preloader isOpen={isLoader} />
           <InfoTooltip status={isInfoTooltip} onClose={closeInfoTooltip} />
         </CurrentUserContext.Provider>
       )}

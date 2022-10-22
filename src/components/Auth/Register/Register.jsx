@@ -1,16 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import './Register.css';
 import logo from '../../../images/logo.svg';
 import useFormWithValidation from '../../../hooks/useFormWithValidation';
 
-export default function Register({ handleRegister }) {
+export default function Register({ handleRegister, registerError }) {
   const { values, handleChange, resetForm, errors, isValid } = useFormWithValidation();
+  const [hasChanges, setHasChanges] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
     handleRegister(values);
+    setHasChanges(false);
+  }
+
+  function handleChangeInputValue(e) {
+    setHasChanges(true);
+    handleChange(e);
   }
 
   useEffect(() => {
@@ -37,7 +44,7 @@ export default function Register({ handleRegister }) {
               className={`register__input ${
                 errors.name && 'register__input_error'
               }`}
-              onChange={handleChange}
+              onChange={handleChangeInputValue}
               value={values.name || ''}
               type="text"
               required
@@ -53,7 +60,7 @@ export default function Register({ handleRegister }) {
               className={`register__input ${
                 errors.email && 'register__input_error'
               }`}
-              onChange={handleChange}
+              onChange={handleChangeInputValue}
               value={values.email || ''}
               type="email"
               required
@@ -67,13 +74,19 @@ export default function Register({ handleRegister }) {
               className={`register__input ${
                 errors.password && 'register__input_error'
               }`}
-              onChange={handleChange}
+              onChange={handleChangeInputValue}
               value={values.password || ''}
               type="password"
               required
             />
             <span className="register__error">{errors.password || ''}</span>
           </label>
+
+          {registerError && !hasChanges && (
+            <label className="register__label">
+              <span className="register__error register__error_be">{registerError}</span>
+            </label>
+          )}
         </div>
         <button
           type="submit"

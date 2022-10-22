@@ -1,4 +1,6 @@
-const BASE_URL = 'https://api.liza.diplom.nomoredomains.club';
+const BASE_URL = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:3000'
+  : 'https://api.liza.diplom.nomoredomains.club';
 const MOVIES_URL = 'https://api.nomoreparties.co/beatfilm-movies';
 const SHORTMOVIES_DURATION = 40;
 const DEVICE_PARAMS = {

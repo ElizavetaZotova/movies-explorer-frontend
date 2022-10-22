@@ -1,19 +1,15 @@
-import { useState, useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 import './SearchForm.css';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import useFormWithValidation from '../../../hooks/useFormWithValidation';
-import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 
 export default function SearchForm({
   handleSearchSubmit,
   handleShortFilms,
   shortMovies,
 }) {
-  const currentUser = useContext(CurrentUserContext);
-  const location = useLocation();
-  const { values, handleChange, isValid, setIsValid } = useFormWithValidation();
+  const { values, handleChange, isValid } = useFormWithValidation();
 
   const [errorQuery, setErrorQuery] = useState('');
 
@@ -25,15 +21,6 @@ export default function SearchForm({
   useEffect(() => {
     setErrorQuery('')
   }, [isValid]);
-
-  useEffect(() => {
-    if (location.pathname === '/movies' && localStorage.getItem(`${currentUser.email} - movieSearch`)) {
-      const searchValue = localStorage.getItem(`${currentUser.email} - movieSearch`);
-
-      values.search = searchValue;
-      setIsValid(true);
-    }
-  }, [currentUser, location.pathname]);
 
   return (
     <section className="search">

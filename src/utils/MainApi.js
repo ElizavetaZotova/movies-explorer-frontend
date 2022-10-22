@@ -31,6 +31,14 @@ class Api {
     }).then(res => this._requestResult(res));
   }
 
+  logout() {
+    return fetch(`${this._baseUrl}/signout`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    }).then(res => this._requestResult(res));
+  }
+
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: { 'Content-Type': 'application/json' },
