@@ -2,7 +2,7 @@ const BASE_URL = process.env.NODE_ENV === 'development'
   ? 'http://localhost:3000'
   : 'https://api.liza.diplom.nomoredomains.club';
 const MOVIES_URL = 'https://api.nomoreparties.co/beatfilm-movies';
-const SHORTMOVIES_DURATION = 40;
+const SHORT_MOVIES_DURATION = 40;
 const DEVICE_PARAMS = {
   desktop: {
     width: 917,
@@ -27,4 +27,4 @@ const DEVICE_PARAMS = {
   },
 };
 
-export { BASE_URL, MOVIES_URL, SHORTMOVIES_DURATION, DEVICE_PARAMS };
+export { BASE_URL, MOVIES_URL, SHORT_MOVIES_DURATION, DEVICE_PARAMS };

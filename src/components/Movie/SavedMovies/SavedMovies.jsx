@@ -22,7 +22,7 @@ export default function SavedMovies({
     if (moviesList.length === 0) {
       setNotFound(true);
     } else {
-      // setNotFound(false);
+      setNotFound(false);
       setFilteredMovies(moviesList);
       setShowedMovies(moviesList);
     }

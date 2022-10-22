@@ -11,12 +11,10 @@ export default function MoviesCard({
 }) {
   const location = useLocation();
 
-  // сохранение фильма
   function handleLikeClick() {
     onLikeClick(movie);
   }
 
-  // удаление фильма
   function handleDeleteClick() {
     onDeleteClick(movie);
   }
