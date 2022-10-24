@@ -6,6 +6,12 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import EmptyList from '../EmptyList/EmptyList';
 
 import {
+  SHORT_CHECKBOX_KEY,
+  STORED_MOVIES_KEY,
+  USER_SEARCH_QUERY_KEY,
+} from '../../../utils/constants';
+
+import {
   transformMovies,
   filterMovies,
   filterShortMovies,
@@ -22,59 +28,95 @@ export default function Movies({
 }) {
   const currentUser = useContext(CurrentUserContext);
 
-  const [shortMovies, setShortMovies] = useState(false);
-  const [initialMovies, setInitialMovies] = useState([]);
-  const [filteredMovies, setFilteredMovies] = useState([]);
-  const [notFound, setNotFound] = useState(false);
+  const [shortMovies, setShortMovies] = useState(false); // состояние чекбокса
+  const [initialMovies, setInitialMovies] = useState([]); // фильмы полученные с запроса
+  const [filteredMovies, setFilteredMovies] = useState([]); // отфильтрованные по чекбоксу и запросу фильмы
+  const [notFound, setNotFound] = useState(false); // если по запросу ничего не найдено - скроем фильмы
+  const [isAllMovies, setIsAllMovies] = useState([]); // все фильмы от сервера, для единоразового обращения к нему
 
   function handleSetFilteredMovies(movies, userQuery, shortMoviesCheckbox) {
     const moviesList = filterMovies(movies, userQuery, shortMoviesCheckbox);
 
-    setNotFound(false);
-
     if (moviesList.length === 0) {
       setNotFound(true);
+    } else {
+      setNotFound(false);
     }
 
     setInitialMovies(moviesList);
     setFilteredMovies(
       shortMoviesCheckbox ? filterShortMovies(moviesList) : moviesList
     );
+    localStorage.setItem(
+      STORED_MOVIES_KEY,
+      JSON.stringify(moviesList)
+    );
   }
 
   function handleSearchSubmit(inputValue) {
-    setIsLoader(true);
-    moviesApi
-      .getMovies()
-      .then((movies) => {
-        handleSetFilteredMovies(
-          transformMovies(movies),
-          inputValue,
-          shortMovies
-        );
-      })
-      .catch(() =>
-        setIsInfoTooltip({
-          isOpen: true,
-          successful: false,
-          text: 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.',
+    localStorage.setItem(USER_SEARCH_QUERY_KEY, inputValue);
+    localStorage.setItem(SHORT_CHECKBOX_KEY, shortMovies);
+
+    if (isAllMovies.length === 0) {
+      setIsLoader(true);
+      moviesApi
+        .getMovies()
+        .then(movies => {
+          setIsAllMovies(movies);
+          handleSetFilteredMovies(
+            transformMovies(movies),
+            inputValue,
+            shortMovies
+          );
         })
-      )
-      .finally(() => setIsLoader(false));
+        .catch(() =>
+          setIsInfoTooltip({
+            isOpen: true,
+            successful: false,
+            text: 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.',
+          })
+        )
+        .finally(() => setIsLoader(false));
+    } else {
+      handleSetFilteredMovies(isAllMovies, inputValue, shortMovies);
+    }
   }
 
   function handleShortFilms() {
     setShortMovies(!shortMovies);
-
     if (!shortMovies) {
-      return setFilteredMovies(filterShortMovies(initialMovies));
+      setFilteredMovies(filterShortMovies(initialMovies));
+    } else {
+      setFilteredMovies(initialMovies);
     }
-
-    setFilteredMovies(initialMovies);
+    localStorage.setItem(SHORT_CHECKBOX_KEY, !shortMovies);
   }
 
   useEffect(() => {
-    handleSearchSubmit('');
+    if (localStorage.getItem(SHORT_CHECKBOX_KEY) === 'true') {
+      setShortMovies(true);
+    } else {
+      setShortMovies(false);
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (localStorage.getItem(STORED_MOVIES_KEY)) {
+      const movies = JSON.parse(
+        localStorage.getItem(STORED_MOVIES_KEY)
+      );
+      setInitialMovies(movies);
+
+      if (
+        localStorage.getItem(SHORT_CHECKBOX_KEY) === 'true'
+      ) {
+        setFilteredMovies(filterShortMovies(movies));
+      } else {
+        setFilteredMovies(movies);
+      }
+    } else {
+      handleSearchSubmit('');
+    }
   }, [currentUser]);
 
   return (

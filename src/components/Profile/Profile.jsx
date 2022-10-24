@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import useFormWithValidation from '../../hooks/useFormWithValidation';
@@ -8,6 +8,8 @@ import './Profile.css';
 export default function Profile({ handleSignOut, handleProfile }) {
   const { values, handleChange, resetForm, errors, isValid } = useFormWithValidation();
   const currentUser = useContext(CurrentUserContext);
+
+  const [requirementValidity, setRequirementValidity] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -20,7 +22,9 @@ export default function Profile({ handleSignOut, handleProfile }) {
     }
   }, [currentUser, resetForm]);
 
-  const requirementValidity = (!isValid || (currentUser.name === values.name && currentUser.email === values.email));
+  useEffect(() => {
+    setRequirementValidity(isValid && (currentUser.name !== values.name || currentUser.email !== values.email));
+  }, [currentUser, isValid, values]);
 
 
   return (
@@ -41,7 +45,7 @@ export default function Profile({ handleSignOut, handleProfile }) {
                 errors.name && 'profile__input_error'
               }`}
               onChange={handleChange}
-              value={values.name || 'Елизавета'}
+              value={values.name}
               type="text"
               required
               minLength="2"
@@ -57,7 +61,7 @@ export default function Profile({ handleSignOut, handleProfile }) {
                 errors.email && 'profile__input_error'
               }`}
               onChange={handleChange}
-              value={values.email || 'zeezotova@yandex.ru'}
+              value={values.email}
               type="email"
               required
             />
@@ -70,7 +74,7 @@ export default function Profile({ handleSignOut, handleProfile }) {
             className={`profile__button-edit ${
               !requirementValidity && 'profile__button-edit_disabled'
             }`}
-            disabled={requirementValidity ? true : false}
+            disabled={requirementValidity ? false : true}
           >
             Редактировать
           </button>

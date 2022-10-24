@@ -16,7 +16,7 @@ export default function useScreenWidth() {
     function resizeController() {
       if (!resizeTimer) {
         resizeTimer = setTimeout(() => {
-          resizeTimer = null;
+          clearTimeout(resizeTimer);
           handleScreenResize();
         }, 1000);
       }

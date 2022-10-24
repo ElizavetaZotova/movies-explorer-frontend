@@ -28,6 +28,7 @@ function filterMovies(movies, userQuery, shortMoviesCheckbox) {
     const movieRu = String(movie.nameRU).toLowerCase().trim();
     const movieEn = String(movie.nameEN).toLowerCase().trim();
     const userMovie = userQuery.toLowerCase().trim();
+
     return movieRu.indexOf(userMovie) !== -1 || movieEn.indexOf(userMovie) !== -1;
   });
 

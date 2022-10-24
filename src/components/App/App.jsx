@@ -98,7 +98,8 @@ export default function App() {
     .then(() => {
       setCurrentUser({});
       setLoggedIn(false);
-      history.push('/');
+      localStorage.clear();
+      window.location.href = '/';
     })
     .catch((err) =>
       setIsInfoTooltip({
@@ -166,7 +167,7 @@ export default function App() {
           isOpen: true,
           successful: false,
           text: err,
-        })
+        }),
       );
   }
 
