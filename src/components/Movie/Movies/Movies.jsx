@@ -28,11 +28,11 @@ export default function Movies({
 }) {
   const currentUser = useContext(CurrentUserContext);
 
-  const [shortMovies, setShortMovies] = useState(false); // состояние чекбокса
-  const [initialMovies, setInitialMovies] = useState([]); // фильмы полученные с запроса
-  const [filteredMovies, setFilteredMovies] = useState([]); // отфильтрованные по чекбоксу и запросу фильмы
-  const [notFound, setNotFound] = useState(false); // если по запросу ничего не найдено - скроем фильмы
-  const [isAllMovies, setIsAllMovies] = useState([]); // все фильмы от сервера, для единоразового обращения к нему
+  const [shortMovies, setShortMovies] = useState(false);
+  const [initialMovies, setInitialMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [notFound, setNotFound] = useState(false);
+  const [isAllMovies, setIsAllMovies] = useState([]);
 
   function handleSetFilteredMovies(movies, userQuery, shortMoviesCheckbox) {
     const moviesList = filterMovies(movies, userQuery, shortMoviesCheckbox);
