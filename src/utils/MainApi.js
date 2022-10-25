@@ -7,6 +7,25 @@ class Api {
 
   async _requestResult(res) {
     const result = await res.json();
+
+    if (res.ok) {
+      return result.data;
+    }
+
+    if (res.status === 401) {
+      alert('Пользователь не авторизирован!');
+      localStorage.clear();
+      window.location.href = '/';
+
+      Promise.reject(result.message);
+    }
+
+    return Promise.reject(result.message);
+  }
+
+  async _requestCheckResult(res) {
+    const result = await res.json();
+
     return res.ok ? result.data : Promise.reject(result.message);
   }
 
@@ -43,7 +62,16 @@ class Api {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-    }).then(res => this._requestResult(res));
+    })
+      .then(res => this._requestResult(res));
+  }
+
+  checkUserAuth() {
+    return fetch(`${this._baseUrl}/users/me`, {
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    })
+      .then(res => this._requestCheckResult(res));
   }
 
   updateUser(name, email) {
@@ -54,7 +82,8 @@ class Api {
       },
       credentials: 'include',
       body: JSON.stringify({ name, email }),
-    }).then(res => this._requestResult(res));
+    })
+      .then(res => this._requestResult(res));
   }
 
   getSavedMovies() {

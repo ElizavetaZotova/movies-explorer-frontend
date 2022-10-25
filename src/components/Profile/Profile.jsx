@@ -5,7 +5,7 @@ import useFormWithValidation from '../../hooks/useFormWithValidation';
 
 import './Profile.css';
 
-export default function Profile({ handleSignOut, handleProfile }) {
+export default function Profile({ handleSignOut, handleProfile, isLoading }) {
   const { values, handleChange, resetForm, errors, isValid } = useFormWithValidation();
   const currentUser = useContext(CurrentUserContext);
 
@@ -23,8 +23,8 @@ export default function Profile({ handleSignOut, handleProfile }) {
   }, [currentUser, resetForm]);
 
   useEffect(() => {
-    setRequirementValidity(isValid && (currentUser.name !== values.name || currentUser.email !== values.email));
-  }, [currentUser, isValid, values]);
+    setRequirementValidity(!isLoading && isValid && (currentUser.name !== values.name || currentUser.email !== values.email));
+  }, [currentUser, isValid, values, isLoading]);
 
 
   return (
@@ -35,7 +35,7 @@ export default function Profile({ handleSignOut, handleProfile }) {
         noValidate
         onSubmit={handleSubmit}
       >
-        <h1 className="profile__title">Привет, Елизавета!</h1>
+        <h1 className="profile__title">Привет, {currentUser.name}!</h1>
         <div className="profile__labels-container">
           <label className="profile__label">
             <span className="profile__label-text">Имя</span>
@@ -50,6 +50,7 @@ export default function Profile({ handleSignOut, handleProfile }) {
               required
               minLength="2"
               maxLength="30"
+              disabled={isLoading}
             />
             <span className="profile__error-name">{errors.name || ''}</span>
           </label>
@@ -64,6 +65,7 @@ export default function Profile({ handleSignOut, handleProfile }) {
               value={values.email}
               type="email"
               required
+              disabled={isLoading}
             />
             <span className="profile__error">{errors.email || ''}</span>
           </label>

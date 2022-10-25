@@ -9,6 +9,7 @@ import {
   SHORT_CHECKBOX_KEY,
   STORED_MOVIES_KEY,
   USER_SEARCH_QUERY_KEY,
+  STORED_FILTERED_MOVIES_KEY,
 } from '../../../utils/constants';
 
 import {
@@ -25,6 +26,7 @@ export default function Movies({
   savedMoviesList,
   onLikeClick,
   onDeleteClick,
+  isLoading,
 }) {
   const currentUser = useContext(CurrentUserContext);
 
@@ -32,7 +34,6 @@ export default function Movies({
   const [initialMovies, setInitialMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [notFound, setNotFound] = useState(false);
-  const [isAllMovies, setIsAllMovies] = useState([]);
 
   function handleSetFilteredMovies(movies, userQuery, shortMoviesCheckbox) {
     const moviesList = filterMovies(movies, userQuery, shortMoviesCheckbox);
@@ -43,28 +44,26 @@ export default function Movies({
       setNotFound(false);
     }
 
-    setInitialMovies(moviesList);
-    setFilteredMovies(
-      shortMoviesCheckbox ? filterShortMovies(moviesList) : moviesList
-    );
-    localStorage.setItem(
-      STORED_MOVIES_KEY,
-      JSON.stringify(moviesList)
-    );
+    const filteredMovies = shortMoviesCheckbox ? filterShortMovies(moviesList) : moviesList;
+
+    setFilteredMovies(filteredMovies);
+    localStorage.setItem(STORED_FILTERED_MOVIES_KEY, JSON.stringify(filteredMovies));
   }
 
   function handleSearchSubmit(inputValue) {
     localStorage.setItem(USER_SEARCH_QUERY_KEY, inputValue);
     localStorage.setItem(SHORT_CHECKBOX_KEY, shortMovies);
 
-    if (isAllMovies.length === 0) {
+    if (initialMovies.length === 0) {
       setIsLoader(true);
       moviesApi
         .getMovies()
         .then(movies => {
-          setIsAllMovies(movies);
+          const transformedMovies = transformMovies(movies);
+          setInitialMovies(transformedMovies);
+          localStorage.setItem(STORED_MOVIES_KEY, JSON.stringify(transformedMovies));
           handleSetFilteredMovies(
-            transformMovies(movies),
+            transformedMovies,
             inputValue,
             shortMovies
           );
@@ -78,17 +77,18 @@ export default function Movies({
         )
         .finally(() => setIsLoader(false));
     } else {
-      handleSetFilteredMovies(isAllMovies, inputValue, shortMovies);
+      handleSetFilteredMovies(initialMovies, inputValue, shortMovies);
     }
   }
 
   function handleShortFilms() {
     setShortMovies(!shortMovies);
-    if (!shortMovies) {
-      setFilteredMovies(filterShortMovies(initialMovies));
-    } else {
-      setFilteredMovies(initialMovies);
-    }
+
+    handleSetFilteredMovies(
+      initialMovies,
+      localStorage.getItem(USER_SEARCH_QUERY_KEY) || '',
+      !shortMovies
+    );
     localStorage.setItem(SHORT_CHECKBOX_KEY, !shortMovies);
   }
 
@@ -107,10 +107,10 @@ export default function Movies({
       );
       setInitialMovies(movies);
 
-      if (
-        localStorage.getItem(SHORT_CHECKBOX_KEY) === 'true'
-      ) {
-        setFilteredMovies(filterShortMovies(movies));
+      const storedFilteredMovies = localStorage.getItem(STORED_FILTERED_MOVIES_KEY);
+
+      if (storedFilteredMovies) {
+        setFilteredMovies(JSON.parse(storedFilteredMovies));
       } else {
         setFilteredMovies(movies);
       }
@@ -125,6 +125,7 @@ export default function Movies({
         handleSearchSubmit={handleSearchSubmit}
         handleShortFilms={handleShortFilms}
         shortMovies={shortMovies}
+        isLoading={isLoading}
       />
       {!notFound ? (
         <MoviesCardList

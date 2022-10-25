@@ -30,6 +30,7 @@ const DEVICE_PARAMS = {
 
 const SHORT_CHECKBOX_KEY = `movies__short_movies__flag`;
 const STORED_MOVIES_KEY = `movies__flag`;
+const STORED_FILTERED_MOVIES_KEY = `movies__filtered__flag`;
 const USER_SEARCH_QUERY_KEY = `movies__search_query__flag`;
 
 export {
@@ -40,4 +41,5 @@ export {
   SHORT_CHECKBOX_KEY,
   STORED_MOVIES_KEY,
   USER_SEARCH_QUERY_KEY,
+  STORED_FILTERED_MOVIES_KEY,
 };

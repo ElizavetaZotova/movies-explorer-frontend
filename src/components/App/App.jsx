@@ -82,7 +82,8 @@ export default function App() {
 
     mainApi
       .login(email, password)
-      .then(() => {
+      .then((data) => {
+        setCurrentUser(data);
         setLoggedIn(true);
         history.push('/movies');
       })
@@ -175,7 +176,7 @@ export default function App() {
     setIsLoader(true);
 
     mainApi
-      .getUserInfo()
+      .checkUserAuth()
       .then((data) => {
         if (data) {
           setLoggedIn(true);
@@ -183,7 +184,10 @@ export default function App() {
           history.push(location.pathname);
         }
       })
-      .catch(() => {})
+      .catch(() => {
+        setLoggedIn(false);
+        localStorage.clear();
+      })
       .finally(() => {
         setIsLoader(false);
         setLoad(true);
@@ -254,6 +258,7 @@ export default function App() {
               savedMoviesList={savedMoviesList}
               onLikeClick={handleSaveMovie}
               onDeleteClick={handleDeleteMovie}
+              isLoading={isLoader}
             />
             <ProtectedRoute
               path="/saved-movies"
@@ -262,6 +267,7 @@ export default function App() {
               savedMoviesList={savedMoviesList}
               onDeleteClick={handleDeleteMovie}
               setIsInfoTooltip={setIsInfoTooltip}
+              isLoading={isLoader}
             />
             <ProtectedRoute
               path="/profile"
@@ -269,6 +275,7 @@ export default function App() {
               loggedIn={loggedIn}
               handleProfile={handleProfile}
               handleSignOut={handleSignOut}
+              isLoading={isLoader}
             />
             <Route path="*">
               <NotFound goBack={goBack} />

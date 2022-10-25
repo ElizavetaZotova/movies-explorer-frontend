@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
 
-import { SHORT_CHECKBOX_KEY } from '../../../utils/constants';
 import { filterMovies, filterShortMovies } from '../../../utils/utils.js';
 import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 
@@ -31,27 +30,20 @@ export default function SavedMovies({ onDeleteClick, savedMoviesList }) {
   function handleShortFilms() {
     if (!shortMovies) {
       setShortMovies(true);
-      localStorage.setItem(SHORT_CHECKBOX_KEY, true);
       setShowedMovies(filterShortMovies(filteredMovies));
       filterShortMovies(filteredMovies).length === 0
         ? setNotFound(true)
         : setNotFound(false);
     } else {
       setShortMovies(false);
-      localStorage.setItem(SHORT_CHECKBOX_KEY, false);
       filteredMovies.length === 0 ? setNotFound(true) : setNotFound(false);
       setShowedMovies(filteredMovies);
     }
   }
 
   useEffect(() => {
-    if (localStorage.getItem(SHORT_CHECKBOX_KEY) === 'true') {
-      setShortMovies(true);
-      setShowedMovies(filterShortMovies(savedMoviesList));
-    } else {
-      setShortMovies(false);
-      setShowedMovies(savedMoviesList);
-    }
+    setShortMovies(false);
+    setShowedMovies(savedMoviesList);
   }, [savedMoviesList, currentUser]);
 
   useEffect(() => {

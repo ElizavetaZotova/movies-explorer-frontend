@@ -11,6 +11,7 @@ export default function SearchForm({
   handleSearchSubmit,
   handleShortFilms,
   shortMovies,
+  isLoading
 }) {
   const currentUser = useContext(CurrentUserContext);
 
@@ -56,13 +57,15 @@ export default function SearchForm({
           placeholder="Фильм"
           value={values.search || ''}
           onChange={handleChange}
+          disabled={isLoading}
         />
         <span className="search__error">{errorQuery}</span>
-        <button className="search__button" type="submit"></button>
+        <button className="search__button" type="submit" disabled={isLoading}></button>
       </form>
       <FilterCheckbox
         shortMovies={shortMovies}
         handleShortFilms={handleShortFilms}
+        isLoading={isLoading}
       />
     </section>
   );
