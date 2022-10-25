@@ -44,10 +44,15 @@ export default function Movies({
       setNotFound(false);
     }
 
-    const filteredMovies = shortMoviesCheckbox ? filterShortMovies(moviesList) : moviesList;
+    const filteredMovies = shortMoviesCheckbox
+      ? filterShortMovies(moviesList)
+      : moviesList;
 
     setFilteredMovies(filteredMovies);
-    localStorage.setItem(STORED_FILTERED_MOVIES_KEY, JSON.stringify(filteredMovies));
+    localStorage.setItem(
+      STORED_FILTERED_MOVIES_KEY,
+      JSON.stringify(filteredMovies)
+    );
   }
 
   function handleSearchSubmit(inputValue) {
@@ -58,15 +63,14 @@ export default function Movies({
       setIsLoader(true);
       moviesApi
         .getMovies()
-        .then(movies => {
+        .then((movies) => {
           const transformedMovies = transformMovies(movies);
           setInitialMovies(transformedMovies);
-          localStorage.setItem(STORED_MOVIES_KEY, JSON.stringify(transformedMovies));
-          handleSetFilteredMovies(
-            transformedMovies,
-            inputValue,
-            shortMovies
+          localStorage.setItem(
+            STORED_MOVIES_KEY,
+            JSON.stringify(transformedMovies)
           );
+          handleSetFilteredMovies(transformedMovies, inputValue, shortMovies);
         })
         .catch(() =>
           setIsInfoTooltip({
@@ -102,12 +106,12 @@ export default function Movies({
 
   useEffect(() => {
     if (localStorage.getItem(STORED_MOVIES_KEY)) {
-      const movies = JSON.parse(
-        localStorage.getItem(STORED_MOVIES_KEY)
-      );
+      const movies = JSON.parse(localStorage.getItem(STORED_MOVIES_KEY));
       setInitialMovies(movies);
 
-      const storedFilteredMovies = localStorage.getItem(STORED_FILTERED_MOVIES_KEY);
+      const storedFilteredMovies = localStorage.getItem(
+        STORED_FILTERED_MOVIES_KEY
+      );
 
       if (storedFilteredMovies) {
         setFilteredMovies(JSON.parse(storedFilteredMovies));

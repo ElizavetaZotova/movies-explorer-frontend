@@ -6,7 +6,8 @@ import useFormWithValidation from '../../hooks/useFormWithValidation';
 import './Profile.css';
 
 export default function Profile({ handleSignOut, handleProfile, isLoading }) {
-  const { values, handleChange, resetForm, errors, isValid } = useFormWithValidation();
+  const { values, handleChange, resetForm, errors, isValid } =
+    useFormWithValidation();
   const currentUser = useContext(CurrentUserContext);
 
   const [requirementValidity, setRequirementValidity] = useState(false);
@@ -23,9 +24,12 @@ export default function Profile({ handleSignOut, handleProfile, isLoading }) {
   }, [currentUser, resetForm]);
 
   useEffect(() => {
-    setRequirementValidity(!isLoading && isValid && (currentUser.name !== values.name || currentUser.email !== values.email));
+    setRequirementValidity(
+      !isLoading &&
+        isValid &&
+        (currentUser.name !== values.name || currentUser.email !== values.email)
+    );
   }, [currentUser, isValid, values, isLoading]);
-
 
   return (
     <main className="profile">
@@ -80,7 +84,11 @@ export default function Profile({ handleSignOut, handleProfile, isLoading }) {
           >
             Редактировать
           </button>
-          <button type="button" className="profile__button-exit" onClick={handleSignOut}>
+          <button
+            type="button"
+            className="profile__button-exit"
+            onClick={handleSignOut}
+          >
             Выйти из аккаунта
           </button>
         </div>

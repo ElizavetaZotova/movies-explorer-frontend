@@ -70,9 +70,7 @@ export default function App() {
           handleLogin({ email, password });
         }
       })
-      .catch((err) =>
-        setRegisterError(err)
-      )
+      .catch((err) => setRegisterError(err))
       .finally(() => setIsLoader(false));
   }
 
@@ -87,29 +85,27 @@ export default function App() {
         setLoggedIn(true);
         history.push('/movies');
       })
-      .catch((err) =>
-        setLoginError(err)
-      )
+      .catch((err) => setLoginError(err))
       .finally(() => setIsLoader(false));
   }
 
   function handleSignOut() {
     mainApi
-    .logout()
-    .then(() => {
-      setCurrentUser({});
-      setLoggedIn(false);
-      localStorage.clear();
-      window.location.href = '/';
-    })
-    .catch((err) =>
-      setIsInfoTooltip({
-        isOpen: true,
-        successful: false,
-        text: err,
+      .logout()
+      .then(() => {
+        setCurrentUser({});
+        setLoggedIn(false);
+        localStorage.clear();
+        window.location.href = '/';
       })
-    )
-    .finally(() => setIsLoader(false));
+      .catch((err) =>
+        setIsInfoTooltip({
+          isOpen: true,
+          successful: false,
+          text: err,
+        })
+      )
+      .finally(() => setIsLoader(false));
   }
 
   function handleProfile({ name, email }) {
@@ -168,7 +164,7 @@ export default function App() {
           isOpen: true,
           successful: false,
           text: err,
-        }),
+        })
       );
   }
 
@@ -237,14 +233,17 @@ export default function App() {
             </Route>
             <Route exact path="/signup">
               {!loggedIn ? (
-                <Register handleRegister={handleRegister} registerError={registerError}/>
+                <Register
+                  handleRegister={handleRegister}
+                  registerError={registerError}
+                />
               ) : (
                 <Redirect to="/" />
               )}
             </Route>
             <Route exact path="/signin">
               {!loggedIn ? (
-                <Login handleLogin={handleLogin} loginError={loginError}/>
+                <Login handleLogin={handleLogin} loginError={loginError} />
               ) : (
                 <Redirect to="/" />
               )}
