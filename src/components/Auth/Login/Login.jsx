@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import './Login.css';
@@ -6,11 +6,20 @@ import './Login.css';
 import logo from '../../../images/logo.svg';
 import useFormWithValidation from '../../../hooks/useFormWithValidation';
 
-export default function Login() {
-  const { values, handleChange, resetForm, errors, isValid } = useFormWithValidation();
+export default function Login({ handleLogin, loginError }) {
+  const { values, handleChange, resetForm, errors, isValid } =
+    useFormWithValidation();
+  const [hasChanges, setHasChanges] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
+    handleLogin(values);
+    setHasChanges(false);
+  }
+
+  function handleChangeInputValue(e) {
+    setHasChanges(true);
+    handleChange(e);
   }
 
   useEffect(() => {
@@ -35,7 +44,7 @@ export default function Login() {
             <input
               name="email"
               className={`login__input ${errors.email && 'login__input_error'}`}
-              onChange={handleChange}
+              onChange={handleChangeInputValue}
               value={values.email || ''}
               type="email"
               required
@@ -49,13 +58,19 @@ export default function Login() {
               className={`login__input ${
                 errors.password && 'login__input_error'
               }`}
-              onChange={handleChange}
+              onChange={handleChangeInputValue}
               value={values.password || ''}
               type="password"
               required
             />
             <span className="login__error">{errors.password || ''}</span>
           </label>
+
+          {loginError && !hasChanges && (
+            <label className="login__label">
+              <span className="login__error login__error_be">{loginError}</span>
+            </label>
+          )}
         </div>
         <button
           type="submit"

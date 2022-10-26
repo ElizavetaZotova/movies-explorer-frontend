@@ -102,6 +102,10 @@
   left: 0;
 }
 
+.register__error_be {
+  top: 0px;
+}
+
 .register__button {
   margin-top: auto;
   border-style: none;

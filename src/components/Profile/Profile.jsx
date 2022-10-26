@@ -1,19 +1,35 @@
-import { useEffect } from 'react';
+import { useEffect, useContext, useState } from 'react';
 
-import './Profile.css';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import useFormWithValidation from '../../hooks/useFormWithValidation';
 
-export default function Profile() {
+import './Profile.css';
+
+export default function Profile({ handleSignOut, handleProfile, isLoading }) {
   const { values, handleChange, resetForm, errors, isValid } =
     useFormWithValidation();
+  const currentUser = useContext(CurrentUserContext);
+
+  const [requirementValidity, setRequirementValidity] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
+    handleProfile(values);
   }
 
   useEffect(() => {
-    resetForm();
-  }, [resetForm]);
+    if (currentUser) {
+      resetForm(currentUser, {}, true);
+    }
+  }, [currentUser, resetForm]);
+
+  useEffect(() => {
+    setRequirementValidity(
+      !isLoading &&
+        isValid &&
+        (currentUser.name !== values.name || currentUser.email !== values.email)
+    );
+  }, [currentUser, isValid, values, isLoading]);
 
   return (
     <main className="profile">
@@ -23,7 +39,7 @@ export default function Profile() {
         noValidate
         onSubmit={handleSubmit}
       >
-        <h1 className="profile__title">Привет, Елизавета!</h1>
+        <h1 className="profile__title">Привет, {currentUser.name}!</h1>
         <div className="profile__labels-container">
           <label className="profile__label">
             <span className="profile__label-text">Имя</span>
@@ -33,11 +49,12 @@ export default function Profile() {
                 errors.name && 'profile__input_error'
               }`}
               onChange={handleChange}
-              value={values.name || 'Елизавета'}
+              value={values.name}
               type="text"
               required
               minLength="2"
               maxLength="30"
+              disabled={isLoading}
             />
             <span className="profile__error-name">{errors.name || ''}</span>
           </label>
@@ -49,9 +66,10 @@ export default function Profile() {
                 errors.email && 'profile__input_error'
               }`}
               onChange={handleChange}
-              value={values.email || 'zeezotova@yandex.ru'}
+              value={values.email}
               type="email"
               required
+              disabled={isLoading}
             />
             <span className="profile__error">{errors.email || ''}</span>
           </label>
@@ -60,13 +78,17 @@ export default function Profile() {
           <button
             type="submit"
             className={`profile__button-edit ${
-              !isValid && 'profile__button-edit_disabled'
+              !requirementValidity && 'profile__button-edit_disabled'
             }`}
-            disabled={!isValid}
+            disabled={requirementValidity ? false : true}
           >
             Редактировать
           </button>
-          <button type="submit" className="profile__button-exit">
+          <button
+            type="button"
+            className="profile__button-exit"
+            onClick={handleSignOut}
+          >
             Выйти из аккаунта
           </button>
         </div>

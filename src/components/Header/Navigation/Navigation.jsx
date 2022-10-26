@@ -4,7 +4,7 @@ import './Navigation.css';
 import Hamburger from './Hamburger/Hamburger';
 
 export default function Navigation({
-  authorized,
+  loggedIn,
   isBurgerOpened,
   onClickBurger,
   themeBlack,
@@ -15,7 +15,7 @@ export default function Navigation({
 
   return (
     <>
-      {!authorized ? (
+      {!loggedIn ? (
         <nav className={`navigation ${themeBlack ? 'navigation_black' : ''}`}>
           <ul className="navigation__list">
             <li>
